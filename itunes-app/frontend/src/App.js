@@ -21,7 +21,7 @@ function App() {
     e.preventDefault();
     try {
       //use fetch to make GET request to the itunes API passing in media and term as parameters
-      const response = await fetch(`http://localhost:3001/api/search?media=${media}&term=${term}`);
+      const response = await fetch(`https://itunes.apple.com/search?media=${media}&term=${term}`);
       const data = await response.json();
       //update state of searched items and their category based on fetch results
       setSearchItems(data.results); //"results" is the name of the array from the API
