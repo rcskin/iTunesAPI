@@ -4,52 +4,21 @@ import Header from './components/Header';
 import Search from './components/Search';
 import Display from './components/Display';
 import Favorites from './components/Favorites';
+import { useItunesSearch } from './hooks/useItunesSearch';
 
 function App() {
-
-  //initialise states for search terms and API media parameters
-  const [term, setTerm] = useState("");
-  const [media, setMedia] = useState(" ");
-  const [searchItems, setSearchItems] = useState([]);
-  const [searchCategory, setSearchCategory] = useState("");
-  //initialise state for favorites
-  const [favorites, setFavorites] = useState([]);
-  
-  //create handle functions:
-  //handle function for search
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    try {
-      //use fetch to make GET request to the itunes API passing in media and term as parameters
-      const response = await fetch(`https://itunesapi-jbmf.onrender.com/search?media=${media}&term=${term}`);
-      const data = await response.json();
-      //update state of searched items and their category based on fetch results
-      setSearchItems(data.results); //"results" is the name of the array from the API
-      setSearchCategory(media);
-    //catch any errors  
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  //handle function for favorites list
-  const handleAddFavorite = (result) => {
-    //error when deleting if adding duplicate favorites
-    //check if item is already a favorite in list of favorites using some() method
-    const isFavorite = favorites.some((favorite) => JSON.stringify(favorite) === JSON.stringify(result));
-    // if false, add the item to favourites state
-    if (!isFavorite) {
-    //update state of favorites with existing favorites followed by new result
-    setFavorites([...favorites, result]);
-  }};
-
-  //handle function for removing favorite item
-  const handleRemoveFavorite = (item) => {
-    //use filter method to remove item from array and create a new array (updatedList) without the item
-    const updatedList = favorites.filter((favorite) => JSON.stringify(favorite) !== JSON.stringify(item));
-    //update state of favorites to new array
-    setFavorites(() => updatedList);
-  };
+  const {
+    term,
+    setTerm,
+    media,
+    setMedia,
+    searchItems,
+    searchCategory,
+    favorites,
+    handleSearch,
+    handleAddFavorite,
+    handleRemoveFavorite,
+  } = useItunesSearch();
 
 
   return (
